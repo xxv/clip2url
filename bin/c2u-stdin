@@ -1,0 +1,40 @@
+#!/bin/bash
+# A simple STDIN -> URL program.
+# 
+# Released into the public domain on Thu Jul 31 15:54:43 EDT 2008
+# by Steve Pomeroy <steve@staticfree.info>
+# 
+# requires:
+#    openssh-client xclip
+
+# need ssh access to this
+remote_host='staticfree.info';
+
+# the webroot should map to the filesystem at remote_url
+# without a trailing slash.
+remote_url="http://staticfree.info"
+rh_webroot="/home/steve/web";
+
+# this path should exist before running this script
+rh_archive="clip";
+
+### end config ###
+
+if (( "$#" < 2 )); then
+    echo "usage: $0 extension description [icon]";
+    exit 1;
+fi
+
+path=$(date '+%Y-%m-%dT%H%M%S');
+file=$path.$1;
+full_url="$remote_url/$rh_archive/$path";
+
+icon=/usr/share/icons/gnome/32x32/emblems/emblem-photos.png
+if [ "$3" != "" ]; then
+    icon="$3";
+fi
+
+ssh $remote_host "cat > $rh_webroot/$rh_archive/$file" &&
+echo "$2 saved as $full_url" &&
+echo $full_url | xclip -i
+notify-send -i $icon "$2 published" "$2 published to web, URL in clipboard: $full_url"

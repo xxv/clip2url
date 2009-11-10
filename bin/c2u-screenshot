@@ -1,0 +1,12 @@
+#!/bin/bash
+# A simple screenshot -> URL program.
+# 
+# Released into the public domain on Thu Jul 31 15:54:43 EDT 2008
+# by Steve Pomeroy <steve@staticfree.info>
+# 
+# requires:
+#    c2u-stdin
+#    imagemagick
+
+import -comment "Screenshot taken of `hostname -s` by `whoami`" png:- |c2u-stdin png "Screenshot"
+

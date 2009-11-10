@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# A simple clipboard-to-URL utility using xclip.
+xclip -o | c2u-stdin txt "Selection"

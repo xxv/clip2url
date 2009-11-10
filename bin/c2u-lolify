@@ -1,0 +1,26 @@
+#!/bin/bash
+# Republishes the URL in the clipboard/selection as an Impact-captioned
+# LOLcat-style image
+# requires:
+#    publish_clip
+# Debian packages:  curl zenity imagemagick msttcorefonts
+
+url=`xclip -o`
+if [ "${url:0:7}" != "http://" ]; then
+    echo "need an image URL in the clipboard"
+    exit 1;
+fi
+
+text=`gdialog --inputbox "enter LOL caption" 0 0 "ORLY?" 2>&1`
+
+if [ -z "$text" ]; then
+    exit 1
+fi
+
+gravity=`gdialog --menu "Text Position" 0 0 3 North "Top of image" South "Bottom of image" 2>&1`
+
+if [ -z "$gravity" ]; then
+    exit 1
+fi
+
+curl $url | convert -font /usr/share/fonts/truetype/msttcorefonts/Impact.ttf -pointsize 80 -strokewidth 2 -fill white -stroke black -gravity "$gravity" -annotate 0 "$text" -quality 90 - jpg:- | c2u-stdin jpg "LOLified image"
