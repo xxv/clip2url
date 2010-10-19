@@ -1,0 +1,25 @@
+#!/bin/bash
+# Republishes the URL in the clipboard/selection with attribution
+# requires:
+#    publish_clip
+# Debian packages:  curl zenity imagemagick msttcorefonts
+
+url=`xclip -o`
+if [ "${url:0:7}" != "http://" ]; then
+    echo "need an image URL in the clipboard"
+    exit 1;
+fi
+
+text=`gdialog --inputbox "enter attribution text" 0 0 "CC© " 2>&1`
+
+if [ -z "$text" ]; then
+    exit 1
+fi
+
+gravity=`gdialog --menu "Text Position" 0 0 3 North "Top of image" South "Bottom of image" 2>&1`
+
+if [ -z "$gravity" ]; then
+    exit 1
+fi
+
+curl $url | convert -pointsize 9 -fill white -gravity "$gravity"East -annotate 0 "$text" -quality 90 - jpg:- | c2u-stdin jpg "attributed image"
