@@ -23,4 +23,4 @@ if [ -z "$gravity" ]; then
     exit 1
 fi
 
-curl $url | convert -font /usr/share/fonts/truetype/msttcorefonts/Impact.ttf -pointsize 80 -strokewidth 2 -fill white -stroke black -gravity "$gravity" -annotate 0 "$text" -quality 90 - jpg:- | c2u-stdin jpg "LOLified image"
+curl $url | convert -font Impact-Regular -pointsize 80 -strokewidth 2 -fill white -stroke black -gravity "$gravity" -annotate 0 "$text" -quality 90 - jpg:- | c2u-stdin jpg "LOLified image"
