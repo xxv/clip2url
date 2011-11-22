@@ -6,7 +6,7 @@
 # Debian packages:  curl zenity imagemagick msttcorefonts
 
 url=`xclip -o`
-if [ "${url:0:7}" != "http://" ]; then
+if [[ ! ( "${url:0:7}" == "http://" || "${url:0:7}" == "file://" || "${url:0:8}" == "https://" ) ]]; then
     echo "need an image URL in the clipboard"
     exit 1;
 fi

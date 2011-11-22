@@ -5,7 +5,7 @@
 # by Steve Pomeroy <steve@staticfree.info>
 # 
 # requires:
-#    openssh-client xclip
+#    openssh-client xclip libnotify-bin
 
 # need ssh access to this
 remote_host='staticfree.info';
@@ -36,5 +36,5 @@ fi
 
 ssh $remote_host "cat > $rh_webroot/$rh_archive/$file" &&
 echo "$2 saved as $full_url" &&
-echo $full_url | xclip -i
+echo -n "$full_url" | xclip -i
 notify-send -i $icon "$2 published" "$2 published to web, URL in clipboard: $full_url"
