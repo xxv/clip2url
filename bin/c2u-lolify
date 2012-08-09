@@ -11,6 +11,13 @@ if [[ ! ( "${url:0:7}" == "http://" || "${url:0:7}" == "file://" || "${url:0:8}"
     exit 1;
 fi
 
+extension="${url##*.}"
+
+# if it's more than 4, it's probably something we don't understand
+if [[ "${#extension}" > 4 ]]; then
+    extension="jpg";
+fi
+
 text=`gdialog --inputbox "enter LOL caption" 0 0 "ORLY?" 2>&1`
 
 if [ -z "$text" ]; then
@@ -23,4 +30,4 @@ if [ -z "$gravity" ]; then
     exit 1
 fi
 
-curl $url | convert -font Impact-Regular -pointsize 80 -strokewidth 2 -fill white -stroke black -gravity "$gravity" -annotate 0 "$text" -quality 90 - jpg:- | c2u-stdin jpg "LOLified image"
+curl $url | convert -font Impact-Regular -pointsize 80 -strokewidth 2 -fill white -stroke black -gravity "$gravity" -annotate 0 "$text" -quality 90 - "$extension":- | c2u-stdin "$extension" "LOLified image"
