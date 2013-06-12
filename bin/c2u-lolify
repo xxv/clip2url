@@ -30,4 +30,10 @@ if [ -z "$gravity" ]; then
     exit 1
 fi
 
-curl $url | convert -font Impact-Regular -pointsize 80 -strokewidth 2 -fill white -stroke black -gravity "$gravity" -annotate 0 "$text" -quality 90 - "$extension":- | c2u-stdin "$extension" "LOLified image"
+size=`gdialog --inputbox "enter size, in px" 0 0 "80" 2>&1`
+
+if [ -z "$size" ]; then
+    exit 1
+fi
+
+curl $url | convert -font Impact-Regular -pointsize "$size" -strokewidth 2 -fill white -stroke black -gravity "$gravity" -annotate 0 "$text" -quality 90 - "$extension":- | c2u-stdin "$extension" "LOLified image"
