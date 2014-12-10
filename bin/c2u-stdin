@@ -8,15 +8,15 @@
 #    openssh-client xclip libnotify-bin
 
 # need ssh access to this
-remote_host='staticfree.info';
+remote_host='xxv.so';
 
 # the webroot should map to the filesystem at remote_url
 # without a trailing slash.
-remote_url="http://staticfree.info"
-rh_webroot="/home/steve/web";
+remote_url="http://xxv.so"
+rh_webroot="/var/www/xxv.so";
 
 # this path should exist before running this script
-rh_archive="clip";
+rh_archive="";
 
 ### end config ###
 
@@ -25,16 +25,26 @@ if (( "$#" < 2 )); then
     exit 1;
 fi
 
-path=$(date '+%Y-%m-%dT%H%M%S');
-file=$path.$1;
-full_url="$remote_url/$rh_archive/$path";
+temp="$(tempfile -m 0644)";
+trap "rm -f -- '$temp'" EXIT
 
 icon=/usr/share/icons/gnome/32x32/emblems/emblem-photos.png
 if [ "$3" != "" ]; then
     icon="$3";
 fi
 
-ssh $remote_host "cat > $rh_webroot/$rh_archive/$file" &&
+cat > "$temp";
+
+hash=$(sha224sum "$temp"|awk '{ print toupper(substr($1,0,16)) }')
+
+file="0x$hash.$1";
+path="0x$hash";
+full_url="$remote_url/$rh_archive$path";
+
+scp "$temp" "$remote_host:$rh_webroot/$rh_archive$file" &&
 echo "$2 saved as $full_url" &&
 echo -n "$full_url" | xclip -i
 notify-send -i $icon "$2 published" "$2 published to web, URL in clipboard: $full_url"
+
+rm -f -- "$temp"
+trap - EXIT
