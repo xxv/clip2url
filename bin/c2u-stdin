@@ -35,7 +35,7 @@ fi
 
 cat > "$temp";
 
-hash=$(sha224sum "$temp"|awk '{ print toupper(substr($1,0,8)) }')
+hash=$(sha224sum "$temp"|awk '{ print substr($1,0,8) }')
 
 file="0x$hash.$1";
 path="0x$hash";
