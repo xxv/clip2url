@@ -22,15 +22,10 @@ if [[ "${#extension}" > 4 ]]; then
     extension="jpg";
 fi
 
-text=`gdialog --inputbox "enter LOL caption" 0 0 "ORLY?" 2>&1`
+text_top=`gdialog --inputbox "enter top caption" 0 0 "" 2>&1`
+text_bottom=`gdialog --inputbox "enter bottom caption" 0 0 "" 2>&1`
 
-if [ -z "$text" ]; then
-    exit 1
-fi
-
-gravity=`gdialog --menu "Text Position" 0 0 3 North "Top of image" South "Bottom of image" 2>&1`
-
-if [ -z "$gravity" ]; then
+if [ -z "$text_top$text_bottom" ]; then
     exit 1
 fi
 
@@ -40,4 +35,4 @@ if [ -z "$size" ]; then
     exit 1
 fi
 
-curl $url | convert -font Impact-Regular -pointsize "$size" -strokewidth 2 -fill white -stroke black -gravity "$gravity" -annotate 0 "$text" -quality 90 - "$extension":- | c2u-stdin "$extension" "LOLified image"
+curl $url | convert -font Impact -pointsize "$size" -strokewidth 2 -fill white -stroke black -gravity "north" -annotate 0 "$text_top" -gravity "south" -annotate 0 "$text_bottom" -quality 90 - "$extension":- | c2u-stdin "$extension" "LOLified image"
