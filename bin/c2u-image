@@ -1,0 +1,17 @@
+#!/bin/sh
+
+selection="clipboard"
+targets=$(xclip -selection $selection -t TARGETS -o)
+
+extension=""
+mimetype=""
+
+echo "XX$targets XX"
+case "${targets}" in
+    *"image/gif"*) mimetype="image/gif"; extension="gif";  ;;
+    *"image/png"*) mimetype="image/png"; extension="png";  ;;
+    *"image/jpg"*) mimetype="image/jpg"; extension="jpg";  ;;
+    *) echo "cannot find image on ${selection}" ;;
+esac
+
+xclip -selection ${selection} -t ${mimetype} -o | c2u-stdin $extension "$selection"
