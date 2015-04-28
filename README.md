@@ -4,7 +4,6 @@ title: clip2url
 date: 2013-04-10 00:00:00
 icon: /projects/clip2url/clip2url.icon.png
 description: "A set of simple tools to help you rapidly publish things on your computer to the web. Similar to various pastebins, but lives on your own web hosting."
-
 ---
 
 A set of simple scripts to help one quickly publish information to the web.
