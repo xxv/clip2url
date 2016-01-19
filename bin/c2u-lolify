@@ -61,6 +61,7 @@ esac
 
 convert ${content} \
     +repage \
+    -coalesce \
     -font Impact -pointsize "$size" -strokewidth 2 -fill white -stroke black \
     -gravity north -annotate 0 "$text_top" \
     -gravity south -annotate 0 "$text_bottom" \
