@@ -1,0 +1,16 @@
+#!/bin/sh
+
+temp="$(tempfile -m 0644)";
+
+xclip -t 'text/html' -o > "${temp}" && {
+  if head "${temp}" | grep '<html' > /dev/null; then
+	c2u-stdin html "Selection" < "${temp}"
+  else
+        sed -e '1 i <!DOCTYPE html><html><head></head><body>
+	$ a </body></html>
+	' "${temp}" | c2u-stdin html "Selection"
+  fi
+  } || c2u-text
+
+rm -f -- "$temp"
+trap - EXIT
