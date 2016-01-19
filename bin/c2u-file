@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Publishes a local file to the pastebin.
+# Does not read from the clipboard.
+filename="$1"
+extension="${filename##*.}"
+
+echo $filename
+echo $extension
+
+c2u-stdin "${extension}" "File" < "${filename}"
