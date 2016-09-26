@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Republishes the URL in the clipboard/selection
+# Debian packages:  curl
+
+url=`xclip -o`
+if [[ ! ( "${url:0:7}" == "http://" || "${url:0:7}" == "file://" || "${url:0:8}" == "https://" || ( ${url:0:1} == "/" && -r "$url" ) ) ]]; then
+    echo "need an image URL in the clipboard"
+    exit 1;
+fi
+
+if [[ ${url:0:1} == "/" ]]; then
+    url="file://$url";
+fi
+
+headers=$(mktemp)
+content=$(mktemp)
+
+curl -fs -D ${headers} -o ${content} "$url"
+
+if [ $? -ne 0 ]; then
+    exit 1
+fi
+
+content_type=$(sed -re '/Content-Type/ s!^[^:]*:\s*(\S+)\s*$!\1! p; d' < ${headers})
+
+case "${content_type}" in
+    "image/png")
+        extension="png"
+    ;;
+    "image/jpeg" | "image/jpg")
+        extension="jpg"
+    ;;
+    "image/gif")
+        extension="gif"
+    ;;
+    *)
+    echo "extracting extension from $url"
+    extension="${url##*.}"
+
+    # if it's more than 4, it's probably something we don't understand
+    if [[ "${#extension}" > 4 ]]; then
+        extension="jpg";
+    fi
+esac
+
+c2u-stdin "$extension" "copied image" < ${content}
+
+trap "rm -f -- '$headers' '$content'" EXIT
