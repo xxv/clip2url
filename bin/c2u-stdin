@@ -12,7 +12,7 @@ remote_host='xxv.so';
 
 # the webroot should map to the filesystem at remote_url
 # without a trailing slash.
-remote_url="http://xxv.so"
+remote_url="https://xxv.so"
 rh_webroot="/var/www/xxv.so";
 
 # this path should exist before running this script
