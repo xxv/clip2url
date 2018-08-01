@@ -43,7 +43,7 @@ full_url="$remote_url/$rh_archive$path";
 
 scp "$temp" "$remote_host:$rh_webroot/$rh_archive$file" && \
 echo "$2 saved as $full_url" && \
-echo "$full_url" >> ~/.clip2url.log && \
+echo "`date +'%F %T'` $full_url" >> ~/.clip2url.log && \
 echo -n "$full_url" | xclip -i && \
 notify-send -i $icon "$2 published" "$2 published to web, URL in clipboard: $full_url"
 
