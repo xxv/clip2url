@@ -5,7 +5,9 @@
 filename="$1"
 extension="${filename##*.}"
 
-echo $filename
-echo $extension
+if [ "${filename}" = "${extension}" ]; then
+  echo "Warning: could not determine file extension. Using txt."
+  extension="txt"
+fi
 
 c2u-stdin "${extension}" "File" < "${filename}"
